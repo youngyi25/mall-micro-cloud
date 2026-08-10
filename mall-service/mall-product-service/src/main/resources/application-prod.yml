@@ -1,0 +1,20 @@
+server:
+  port: 9001
+spring:
+  # 数据源 + Druid 连接池
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.150.101:3306/shop_goods?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 初始连接数
+      initial-size: 5
+      # 最小空闲连接
+      min-idle: 3
+      # 最大活跃连接
+      max-active: 20
+# 之后用OSS存储，先预设
+file:
+  path: /opt/app/html/items

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+		<title>我的订单</title>
+		<link rel="icon" href="./img/favicon.ico">
+
+		<!-- 引入样式 -->
+		<link rel="stylesheet" type="text/css" href="./css/style.css" />
+		<link rel="stylesheet" type="text/css" href="./css/modern-theme.css" />
+	</head>
+
+	<body>
+    <!-- 流星特效 -->
+    <div class=shooting-star></div>
+    <div class=shooting-star></div>
+    <div class=shooting-star></div>
+
+		
+		<!--head-->
+		<!-- 头部栏位 -->
+		<!--页面顶部-->
+		<div id="nav-bottom">
+			<!--顶部-->
+			<div class="nav-top">
+				<div class="top">
+					<div class="py-container">
+						<div class="shortcut">
+							<ul class="fl">
+								<li class="f-item">shop欢迎您！</li>
+								<li class="f-item">请
+									<a href="login.html" target="_blank">登录</a>
+									<span>
+										<a href="register.html" target="_blank">免费注册</a>
+									</span>
+								</li>
+							</ul>
+							<div class="fr typelist">
+								<ul class="types">
+									<li class="f-item">
+										<span>我的订单</span>
+									</li>
+
+									<li class="f-item">
+										<span>
+											<a href="cart.html" target="_blank">我的购物车</a>
+										</span>
+									</li>
+									<li class="f-item">
+										<span>
+											<a href="home.html" target="_blank">我的shop</a>
+										</span>
+									</li>
+									<li class="f-item">
+										<span>shop会员</span>
+									</li>
+									<li class="f-item">
+										<span>企业采购</span>
+									</li>
+									<li class="f-item">
+										<span>关注shop</span>
+									</li>
+									<li class="f-item">
+										<span>
+											<a href="cooperation.html" target="_blank">合作招商</a>
+										</span>
+									</li>
+									<li class="f-item">
+										<span>
+											<a href="shoplogin.html" target="_blank">商家后台</a>
+										</span>
+									</li>
+									<li class="f-item">
+										<span>网站导航</li>
+								</ul>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<!--头部-->
+				<div class="header">
+					<div class="py-container">
+						<div class="yui3-g Logo">
+							<div class="yui3-u Left logoArea">
+								<a class="logo-bd" title="shop" href="index.html" target="_blank"></a>
+							</div>
+							<div class="yui3-u Rit searchArea">
+								<div class="search">
+									<form action="" class="sui-form form-inline">
+										<!--searchAutoComplete-->
+										<div class="input-append">
+											<input type="text" id="autocomplete" class="input-error input-xxlarge" />
+											<button class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
+										</div>
+									</form>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="cart py-container">
+			<!--All goods-->
+			
+			<div class="allgoods" id="app">
+				<div class="sui-navbar">
+					<div class="navbar-inner filter">
+						<ul class="sui-nav">
+							<li :class="active==-1?'active':''">
+								<a href="javaScript:void(0)" @click="switched(null)">全部订单</a>
+							</li>
+							<li :class="active==0?'active':''">
+								<a href="javaScript:void(0)" @click="switched(0)">待付款</a>
+							</li>
+							<li :class="active==1?'active':''">
+								<a href="javaScript:void(0)" @click="switched(1)">待发货</a>
+							</li>
+							<li :class="active==2?'active':''">
+								<a href="javaScript:void(0)" @click="switched(2)">已发货</a>
+							</li>
+							<li :class="active==3?'active':''">
+								<a href="javaScript:void(0)" @click="switched(3)">已完成</a>
+							</li>
+							<li :class="active==4?'active':''">
+								<a href="javaScript:void(0)" @click="switched(4)">已关闭</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				
+				<div class="cart-main">
+					
+					
+					<div class="cart-item-list">
+						<div class="cart-body">
+							<div style="border: 1px solid #eee;background-color: #f5f5f5;padding: 10px;margin-bottom: 10px;"
+							v-for="(item,i) in orderInfos" :key="i">
+								<span style="margin-right: 10px;">
+									订单编号：{{item.orderId}}
+								</span>
+								<span style="margin-right: 10px;">
+									下单时间：{{item.createTime}}
+								</span>
+								<span style="margin-right: 10px;">
+									总金额：¥<i style="color: red;">{{item.totalAmount}}</i>元
+								</span>
+                                    <span style="margin-right: 10px;"><a href="#none" style="color:red;" @click="remove(item.orderId)">删除订单</a></span>
+								<!-- vue loadlist -->
+								<div class="cart-list" v-for="(e,j) in item.orderItemsList" :key="j">
+									<ul class="goods-list yui3-g">
+										
+										<li class="yui3-u-6-24" style="border: none;">
+											<div class="good-item">
+													<img :src="e.image" style="max-height: 80px;" /> 
+											</div>
+										</li>
+										<li class="yui3-u-5-24" style="border: none;">
+											{{e.skuName}}
+										</li>
+										<li class="yui3-u-1-8" style="border: none;">
+											<span class="price">¥{{e.price}}</span>
+										</li>
+										<li class="yui3-u-1-8" style="border: none;">
+											<span class="price">×</span>
+										</li>
+										<li class="yui3-u-1-8" style="border: none;">
+											<span class="price">{{e.quantity}}</span>
+										</li>
+										
+										<li class="yui3-u-1-8 item-msg" style="border: none;">
+											<br />
+											<a href="#none">移到收藏</a>
+										</li>
+									</ul>
+								</div>
+							
+							</div>
+							
+
+						</div>
+					</div>
+				</div>
+				
+				<div class="clearfix"></div>
+				<div class="fr page">
+					<div class="sui-pagination pagination-large">
+						<ul>
+							<li :class="pagination.pageNum == 1 ? 'prev disabled':'prev'">
+								<a href="javaScript:void(0)"
+									@click="handlePage((pagination.pageNum - 1))">«上一页</a>
+							</li>
+							<li :class="pagination.pageNum == (i + 1) ? 'active disabled' : ''"
+								v-for="(e,i) in pagination.pages">
+								<a href="javaScript:void(0)" @click="handlePage(i + 1)">{{(i + 1)}}</a>
+							</li>
+							<li :class="pagination.pageNum == pagination.pages ? 'next disabled':'next'">
+								<a href="javaScript:void(0)"
+									@click="handlePage((pagination.pageNum + 1))">下一页»</a>
+							</li>
+						</ul>
+						<div><span>共{{pagination.pages}}页&nbsp;</span><span>
+								到第
+								<input type="text" class="page-num">
+								页 </span></div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		<!-- 底部栏位 -->
+		<!--页面底部-->
+		<div class="clearfix footer">
+			<div class="py-container">
+				<div class="footlink">
+					<div class="Mod-service">
+						<ul class="Mod-Service-list">
+							<li class="grid-service-item intro  intro1">
+
+								<i class="serivce-item fl"></i>
+								<div class="service-text">
+									<h4>正品保障</h4>
+									<p>正品保障，提供发票</p>
+								</div>
+
+							</li>
+							<li class="grid-service-item  intro intro2">
+
+								<i class="serivce-item fl"></i>
+								<div class="service-text">
+									<h4>正品保障</h4>
+									<p>正品保障，提供发票</p>
+								</div>
+
+							</li>
+							<li class="grid-service-item intro  intro3">
+
+								<i class="serivce-item fl"></i>
+								<div class="service-text">
+									<h4>正品保障</h4>
+									<p>正品保障，提供发票</p>
+								</div>
+
+							</li>
+							<li class="grid-service-item  intro intro4">
+
+								<i class="serivce-item fl"></i>
+								<div class="service-text">
+									<h4>正品保障</h4>
+									<p>正品保障，提供发票</p>
+								</div>
+
+							</li>
+							<li class="grid-service-item intro intro5">
+
+								<i class="serivce-item fl"></i>
+								<div class="service-text">
+									<h4>正品保障</h4>
+									<p>正品保障，提供发票</p>
+								</div>
+
+							</li>
+						</ul>
+					</div>
+					<div class="clearfix Mod-list">
+						<div class="yui3-g">
+							<div class="yui3-u-1-6">
+								<h4>购物指南</h4>
+								<ul class="unstyled">
+									<li>购物流程</li>
+									<li>会员介绍</li>
+									<li>生活旅行/团购</li>
+									<li>常见问题</li>
+									<li>购物指南</li>
+								</ul>
+
+							</div>
+							<div class="yui3-u-1-6">
+								<h4>配送方式</h4>
+								<ul class="unstyled">
+									<li>上门自提</li>
+									<li>211限时达</li>
+									<li>配送服务查询</li>
+									<li>配送费收取标准</li>
+									<li>海外配送</li>
+								</ul>
+							</div>
+							<div class="yui3-u-1-6">
+								<h4>支付方式</h4>
+								<ul class="unstyled">
+									<li>货到付款</li>
+									<li>在线支付</li>
+									<li>分期付款</li>
+									<li>邮局汇款</li>
+									<li>公司转账</li>
+								</ul>
+							</div>
+							<div class="yui3-u-1-6">
+								<h4>售后服务</h4>
+								<ul class="unstyled">
+									<li>售后政策</li>
+									<li>价格保护</li>
+									<li>退款说明</li>
+									<li>返修/退换货</li>
+									<li>取消订单</li>
+								</ul>
+							</div>
+							<div class="yui3-u-1-6">
+								<h4>特色服务</h4>
+								<ul class="unstyled">
+									<li>夺宝岛</li>
+									<li>DIY装机</li>
+									<li>延保服务</li>
+									<li>购物卡</li>
+									<li>会员充值卡</li>
+								</ul>
+							</div>
+							<div class="yui3-u-1-6">
+								<h4>帮助中心</h4>
+								<ul class="unstyled">
+									<li>夺宝岛</li>
+									<li>DIY装机</li>
+									<li>延保服务</li>
+									<li>购物卡</li>
+									<li>会员充值卡</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="Mod-copyright">
+						<ul class="helpLink">
+							<li>关于我们
+								<span class="space"></span>
+							</li>
+							<li>联系我们
+								<span class="space"></span>
+							</li>
+							<li>关于我们
+								<span class="space"></span>
+							</li>
+							<li>商家入驻
+								<span class="space"></span>
+							</li>
+							<li>营销中心
+								<span class="space"></span>
+							</li>
+							<li>友情链接
+								<span class="space"></span>
+							</li>
+							<li>关于我们
+								<span class="space"></span>
+							</li>
+							<li>营销中心
+								<span class="space"></span>
+							</li>
+							<li>友情链接
+								<span class="space"></span>
+							</li>
+							<li>关于我们</li>
+						</ul>
+						
+						<p>Copyright©2017-2020 All Rights Reserved.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--页面底部END-->
+		
+		<!-- 引入组件库 -->
+		<script src="js/vue3.js"></script>
+		<script src="js/axios.js"></script>
+		<script src="js/request.js"></script>
+		<script src="js/common.js"></script>
+		<script>
+			const {
+				createApp
+			} = Vue.createApp({
+				data() {
+					return {
+						active:-1,
+						orders: [],
+						orderInfos:[],
+						query:{
+							pageNum:1,
+							pageSize:3
+						},
+						pagination:{}
+					}
+				},
+				
+				mounted(){
+					//列表加载
+					this.list();
+				},
+				methods:{
+					switched(i){
+						this.active = i
+						this.query['status'] = i
+						this.query['pageNum'] = 1
+						this.list()
+					},
+					
+					handlePage(page) {
+						if (page >= 1 && page <= this.pagination.pages) {
+							this.query['pageNum'] = page
+							this.list()
+						}
+					},
+					
+					//购物车列表加载
+					list(){
+						this.orders.length = 0
+						this.orderInfos.length = 0
+						if(sessionStorage.getItem("userInfo")){
+							let json = sessionStorage.getItem("userInfo")
+							let userInfo = JSON.parse(json)
+							this.query['userId'] = userInfo.userId
+						    request.get('/api/order/order/page',{params:this.query})
+							.then(resp =>{
+								if(resp.code == 200 && resp.data){
+									this.orders=JSON.parse(JSON.stringify(resp.data));
+									this.pagination['pageNum'] = resp.data.current
+									this.pagination['pages'] = resp.data.pages
+								}else{
+									location.href = 'login.html?redirect=order_list.html'
+								}
+							})
+						}else{
+					      location.href = 'login.html?redirect=order_list.html'
+				        }
+					},
+					remove(orderId) {
+							if(!confirm("确定要删除该订单吗？")) return;
+							request.delete("/api/order/order/remove/" + orderId)
+								.then(resp => {
+									if(resp.code == 200){
+										alert("删除成功");
+										this.list();
+									}else{
+										alert(resp.msg || "删除失败");
+									}
+								})
+								.catch(err => {
+									alert("删除请求失败");
+								});
+					},
+					
+				},
+				watch:{
+					orders(v){
+						this.orderInfos.length = 0
+						if(v.records){
+							this.orderInfos = v.records
+						}
+						
+					}
+				},
+			}).mount('#app')
+		</script>
+	</body>
+</html>

@@ -1,0 +1,18 @@
+# 服务端口（开发端口，避免冲突）
+server:
+  port: 9004
+logging:
+  level:
+    org.springframework.cloud.stream: DEBUG
+    com.alibaba.cloud.stream.binder.rocketmq: DEBUG
+spring:
+  config:
+    import: #导入多个文件：Data ID?group=Group
+      - nacos:mysql.yml?group=ORDER_GROUP
+      - nacos:mybatis.yml
+      - nacos:log.yml
+      - nacos:knife4j.yml
+      - nacos:sentinel.yml
+      - nacos:order_stock.yml?group=SEATA_GROUP
+      - nacos:mq.yml
+      - nacos:mq_producer.yml?group=ORDER_GROUP

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<div id="alipayForm"></div>
+		</div>
+	</body>
+</html>
+<script src="js/vue3.js"></script>
+ <script src="js/axios.js"></script>
+ <script src="js/request.js"></script>
+<script>
+	const {createApp} = Vue.createApp({
+	
+		  methods:{
+			  openPay(){
+				  let payInfo = null
+				  if(sessionStorage.getItem("payInfo")){
+					  payInfo = JSON.parse(sessionStorage.getItem("payInfo"))
+				  }else{
+					  location.href ='login.html'
+				  }
+				  
+				  // 打开支付页面
+				  request.get('/api/pay/alipay/pay',{params:payInfo})
+				  .then(resp=>{
+					  let innerHtml = resp.toString()
+					  innerHtml = innerHtml.substring(0,innerHtml.indexOf('<script>'))
+					  window.document.getElementById('alipayForm').innerHTML = innerHtml
+					  window.document.forms[0].submit()
+				  })
+			  }
+		  },
+		  mounted() {
+		  	this.openPay()
+		  }
+		 
+	    }).mount('#app')
+</script>

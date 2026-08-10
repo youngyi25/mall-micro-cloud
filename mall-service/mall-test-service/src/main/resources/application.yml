@@ -1,0 +1,92 @@
+server:
+  port: 10001
+spring:
+  data:
+    redis:
+      host: 192.168.150.101
+      port: 6379
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 4
+          min-idle: 1
+  application:
+    name: mall-test-service
+  cloud:
+    function:
+      definition: testInput;testOrderInput;testMultipleInputOne;testMultipleInputTwo;testMultipleInputThree
+    nacos:
+      discovery:
+        enabled: false
+      config:
+        enabled: false
+        import-check:
+          enabled: false
+    stream:
+      rocketmq:
+        binder:
+          name-server: 192.168.150.101:9876  # NameServer 地址
+      bindings:
+        testOutput-out-0: #  绑定的 output 输出通道,作为生产者发送消息的目标
+          destination: testA       # 生产者 Topic
+          group: test-producer-group         # 生产者组名
+        testOutput-out-1: # 批量生产者通道
+          destination: testB
+          group: test-producer-batch-group
+          producer:
+            partition-key-extractor-name: orderPartitionKeyExtractor
+            partition-count: 3 # 必须配置，且与 testB 队列数一致
+        # ========== 去重生产者通道配置 ==========
+        testOutput-out-2:
+          destination: orderTopic
+          group: test-order-producer-group
+        testInput-in-0: #  绑定的 input 输入通道,作为消费者接收消息的源
+          destination: testA       # 消费者 Topic
+          group: test-consumer-group         # 消费者组名
+          consumer:
+            max-attempts: 3 # 消费重试3次
+        # ========== 去重消费者通道配置 ==========
+        testOrderInput-in-0:
+          destination: orderTopic
+          group: test-order-consumer-group
+        # ========== 多消费者通道配置（顺序消费） ==========
+        testMultipleInputOne-in-0:
+          destination: testB
+          group: test-multiple-consumer-group
+          consumer:
+            max-attempts: 3
+            orderly: true
+        testMultipleInputTwo-in-0:
+          destination: testB
+          group: test-multiple-consumer-group
+          consumer:
+            max-attempts: 3
+            orderly: true
+        testMultipleInputThree-in-0:
+          destination: testB
+          group: test-multiple-consumer-group
+          consumer:
+            max-attempts: 3
+            orderly: true
+header:
+  alloweds:
+    # 认证相关
+    - Authorization
+    - X-Auth-Token
+    - X-Gateway-Secret
+    # 用户信息（由网关过滤器注入）
+    - X-User-Id
+    # 链路追踪
+    - X-Trace-Id
+    # 请求来源
+    - X-Request-Source
+    - X-Client-IP
+    # 多租户
+    - X-Tenant-Id
+    - X-Org-Id
+    # API 版本
+    - X-API-Version
+    - X-Version
+feign:
+  sentinel:
+    enabled: true

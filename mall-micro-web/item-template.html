@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+		<title>产品详情页</title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" type="text/css" href="../css/style.css" />
+		<link rel="stylesheet" type="text/css" href="../css/icon.css" />
+		<script type="text/javascript " src="../js/jquery.min.js "></script>
+		<script type="text/javascript " src="../js/sui/sui.min.js "></script>
+		<script type="text/javascript " src="../js/jquery.jqzoom/jquery.jqzoom.js "></script>
+		<script type="text/javascript " src="../js/jquery.jqzoom/zoom.js "></script>
+		<script src="../js/vue3.js"></script>
+		<script src="../js/axios.js"></script>
+		<script src="../js/request.js"></script>
+		
+	</head>
+
+	<body>
+		<div id="app">
+		<!-- 头部栏位 -->
+		<!--页面顶部-->
+		<div id="nav-bottom">
+			<!--顶部-->
+			<div class="nav-top">
+				<div class="top">
+					<div class="py-container">
+						<div class="shortcut">
+							<ul class="fl">
+								<li class="f-item">shop欢迎您！</li>
+								<li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a
+											href="register.html" target="_blank">免费注册</a></span></li>
+							</ul>
+							<div class="fr typelist">
+								<ul class="types">
+									<li class="f-item"><a href="order.html">我的订单</a></li>
+
+									<li class="f-item"><span><a href="cart.html">我的购物车</a></span>
+									</li>
+									<li class="f-item"><span><a href="home.html" target="_blank">我的shop</a></span>
+									</li>
+									<li class="f-item"><span>shop会员</span></li>
+									<li class="f-item"><span>企业采购</span></li>
+									<li class="f-item"><span>关注shop</span></li>
+									<li class="f-item"><span><a href="cooperation.html" target="_blank">合作招商</a></span>
+									</li>
+									<li class="f-item"><span><a href="shoplogin.html" target="_blank">商家后台</a></span>
+									</li>
+									<li class="f-item"><span>网站导航</li>
+								</ul>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<!-- 商品分类导航 -->
+		<!-- 商品分类导航 -->
+		<div class="typeNav">
+			<div class="py-container">
+				<div class="yui3-g NavList">
+					<div class="all-sorts-list">
+						<div :class="active==0?'yui3-u Left all-sort':'yui3-u Left'">
+							<h4 style="text-align: center;cursor: pointer;">全部商品分类</h4>
+						</div>
+					</div>
+
+					
+					<div class="yui3-u Right"></div>
+				</div>
+			</div>
+		</div>
+		<div class="py-container">
+			<div id="item">
+				<div class="crumb-wrap">
+					<h3>{{spuName}}系列</h3>
+				</div>
+				<!--product-info-->
+				<div class="product-info">
+					<div class="fl preview-wrap">
+						<!--放大镜效果-->
+						<div class="zoom">
+							<!--默认第一个预览-->
+							<div id="preview" class="spec-preview">
+								<span class="jqzoom">
+									<img :jqimg="images[0]" :src="images[0]" width="400" height="400" />
+								</span>
+							</div>
+							<!--下方的缩略图-->
+							<div class="spec-scroll">
+								<a class="prev">&lt;</a>
+								<!--左右按钮-->
+								<div class="items">
+									<ul>
+										<li v-for="(image,i) in images" :key ="i"> 
+											<img :src="image" :bimg="image"
+												onmousemove="preview(this)" />
+										</li>
+										
+									</ul>
+								</div>
+								<a class="next">&gt;</a>
+							</div>
+						</div>
+					</div>
+					<div class="fr itemInfo-wrap" id="app">
+						<div class="sku-name">
+							<h4>{{skuInfo.skuName}}</h4>
+						</div>
+						<div>
+							<span>推荐选择下方[移动优惠购],手机套餐齐搞定,不用换号,每月还有话费返</span>
+						</div>
+						<div class="summary">
+							<div class="summary-wrap">
+								<div class="fl title">
+									<i>价　　格</i>
+								</div>
+								<div class="fl price">
+									<i>¥&nbsp;&nbsp;</i>
+									<em>{{skuInfo.price}}</em>
+									<span>降价通知</span>
+								</div>
+								<div class="fr remark">
+									<i>累计评价</i>
+									<em>36908478</em>
+								</div>
+							</div>
+							<div class="summary-wrap">
+								<div class="fl title">
+									<i>促　　销</i>
+								</div>
+								<div class="fl fix-width">
+									<i class="red-bg">加价购</i>
+									<em
+										class="t-gray">满999.00另加20.00元，或满1999.00另加30.00元，或满2999.00另加40.00元，即可在购物车换购热销商品</em>
+								</div>
+							</div>
+						</div>
+						<div class="support">
+							<div class="summary-wrap">
+								<div class="fl title">
+									<i>支　　持</i>
+								</div>
+								<div class="fl fix-width">
+									<em class="t-gray">以旧换新，闲置手机回收 4G套餐超值抢 礼品购</em>
+								</div>
+							</div>
+							<div class="summary-wrap">
+								<div class="fl title">
+									<i>配 送 至</i>
+								</div>
+								<div class="fl fix-width">
+									<em
+										class="t-gray">{{address}}</em>
+								</div>
+							</div>
+						</div>
+						<div class="clearfix choose">
+							<div id="specification" class="summary-wrap clearfix">
+								<dl v-for="(v,k,j) in attrMap">
+									<dt>
+										<div class="fl title" style="margin: 5px;">
+											<i>{{k}}</i>
+										</div>
+									</dt>
+									<dd v-for="(item,i) in v" :key="j" style="margin: 5px;">
+										<a href="javascript:void(0);" :class="attrs[k]==item?'selected':''" @click="swichSku(k,item)">{{item}}</a>
+									</dd>
+								
+								</dl>
+							
+							</div>
+
+							<div class="summary-wrap">
+								<div class="fl title">
+									<div class="control-group">
+										<div class="cart_icon">
+											<a @click="num > 1?num--:1">-</a>
+											<input type="text" :value="num" minnum="1" />
+											<a @click="num++">+</a>
+										</div>
+									</div>
+								</div>
+								<div class="fl">
+									<ul class="btn-choose unstyled">
+										<li>
+											<a href="javaScript:void(0)" @click="addCart()"
+												class="sui-btn  btn-warning addshopcar">加入购物车</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+		<!-- 底部栏位 -->
+		<!--页面底部-->
+		<div class="clearfix footer">
+			<div class="py-container">
+				<div class="footlink">
+					<div class="Mod-service">
+						<ul class="Mod-Service-list">
+							<li class="grid-service-item intro  intro1">
+
+								<i class="serivce-item fl"></i>
+								<div class="service-text">
+									<h4>正品保障</h4>
+									<p>正品保障，提供发票</p>
+								</div>
+
+							</li>
+							<li class="grid-service-item  intro intro2">
+
+								<i class="serivce-item fl"></i>
+								<div class="service-text">
+									<h4>正品保障</h4>
+									<p>正品保障，提供发票</p>
+								</div>
+
+							</li>
+							<li class="grid-service-item intro  intro3">
+
+								<i class="serivce-item fl"></i>
+								<div class="service-text">
+									<h4>正品保障</h4>
+									<p>正品保障，提供发票</p>
+								</div>
+
+							</li>
+							<li class="grid-service-item  intro intro4">
+
+								<i class="serivce-item fl"></i>
+								<div class="service-text">
+									<h4>正品保障</h4>
+									<p>正品保障，提供发票</p>
+								</div>
+
+							</li>
+							<li class="grid-service-item intro intro5">
+
+								<i class="serivce-item fl"></i>
+								<div class="service-text">
+									<h4>正品保障</h4>
+									<p>正品保障，提供发票</p>
+								</div>
+
+							</li>
+						</ul>
+					</div>
+					<div class="clearfix Mod-list">
+						<div class="yui3-g">
+							<div class="yui3-u-1-6">
+								<h4>购物指南</h4>
+								<ul class="unstyled">
+									<li>购物流程</li>
+									<li>会员介绍</li>
+									<li>生活旅行/团购</li>
+									<li>常见问题</li>
+									<li>购物指南</li>
+								</ul>
+
+							</div>
+							<div class="yui3-u-1-6">
+								<h4>配送方式</h4>
+								<ul class="unstyled">
+									<li>上门自提</li>
+									<li>211限时达</li>
+									<li>配送服务查询</li>
+									<li>配送费收取标准</li>
+									<li>海外配送</li>
+								</ul>
+							</div>
+							<div class="yui3-u-1-6">
+								<h4>支付方式</h4>
+								<ul class="unstyled">
+									<li>货到付款</li>
+									<li>在线支付</li>
+									<li>分期付款</li>
+									<li>邮局汇款</li>
+									<li>公司转账</li>
+								</ul>
+							</div>
+							<div class="yui3-u-1-6">
+								<h4>售后服务</h4>
+								<ul class="unstyled">
+									<li>售后政策</li>
+									<li>价格保护</li>
+									<li>退款说明</li>
+									<li>返修/退换货</li>
+									<li>取消订单</li>
+								</ul>
+							</div>
+							<div class="yui3-u-1-6">
+								<h4>特色服务</h4>
+								<ul class="unstyled">
+									<li>夺宝岛</li>
+									<li>DIY装机</li>
+									<li>延保服务</li>
+									<li>购物卡</li>
+									<li>会员充值卡</li>
+								</ul>
+							</div>
+							<div class="yui3-u-1-6">
+								<h4>帮助中心</h4>
+								<ul class="unstyled">
+									<li>DIY装机</li>
+									<li>购物卡</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="Mod-copyright">
+						<ul class="helpLink">
+							<li>关于我们<span class="space"></span></li>
+							<li>联系我们<span class="space"></span></li>
+							<li>关于我们<span class="space"></span></li>
+							<li>商家入驻<span class="space"></span></li>
+							<li>营销中心<span class="space"></span></li>
+							<li>友情链接<span class="space"></span></li>
+							<li>关于我们<span class="space"></span></li>
+							<li>营销中心<span class="space"></span></li>
+							<li>友情链接<span class="space"></span></li>
+							<li>关于我们</li>
+						</ul>
+						<p>Copyright©2025-2030 All Rights Reserved.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+		
+
+	</body>
+</html>
+
+<script th:inline="javascript">
+	const {
+		createApp
+	} = Vue.createApp({
+
+		data() {
+			return {
+				active:0,
+				attrs:{},
+				num:1,
+				goodsdetail: [[${productDetail}]],
+				spuName:null,
+				skuInfoList:[],
+				skuInfo:{},
+				attrMap:{},
+				images:[],
+				addressList:[],
+				address:''
+			
+			}
+		},
+		methods: {
+			// 拆分数据
+			splitGoodsdetail(){
+				this.spuName = this.goodsdetail.spuName
+				this.skuInfoList = JSON.parse(JSON.stringify(this.goodsdetail.productDTOs))
+				this.attrMap = this.goodsdetail.attrMap
+				
+			},
+			
+			
+			// 激活属性
+			activeAttr(){
+				this.attrs={}
+				for (const [key, value] of Object.entries(this.attrMap)) {
+					for( let i = 0; i < value.length; i++){
+						if(this.skuInfo.skuAttribute.includes(value[i])){
+							this.attrs[key] = value[i]
+						}
+					}
+				}
+			},
+			// 加载用户地址
+			getAddress(){
+				if(sessionStorage.getItem("addressList")){
+					let json = sessionStorage.getItem("addressList")
+					this.addressList = JSON.parse(json);
+				}
+			},
+			// 切换sku
+			swichSku(k,v){
+				this.attrs[k] = v
+				for(let i = 0; i < this.skuInfoList.length;i++){
+					if(this.skuInfoList[i].skuAttribute.includes(v)){
+						this.skuInfo = this.skuInfoList[i]
+						break
+					}
+				}
+				this.activeAttr()
+			},
+			
+			// 加购
+			addCart(){
+				if(sessionStorage.getItem("userInfo")){
+					let json = sessionStorage.getItem("userInfo")
+					let userInfo = JSON.parse(json)
+					let cart = {}
+					cart['userId'] = userInfo.userId
+					cart['num'] = this.num
+					cart['skuId'] = this.skuInfo.id
+					cart['name'] = this.skuInfo.skuName
+					cart['price'] = this.skuInfo.price
+					cart['image'] = this.skuInfo.skuDefaultImg
+					request.post("/cart/save",cart)
+					.then(resp => {
+						if(resp.code == 200){
+							location.href = 'cart.html'
+						}else if(resp.code == 401 || resp.code == 4001){
+							location.href = 'login.html'
+						}
+					})
+					
+				}else{
+					location.href = 'login.html'
+				}
+				
+			},
+			
+		},
+		watch:{
+			skuInfoList(val){
+				let id = sessionStorage.getItem("detailskuId")
+				for(let i = 0; i < val.length; i++){
+					if(val[i].id == id){
+						this.skuInfo = JSON.parse(JSON.stringify(val[i]));
+						break;
+					}
+				}
+			},
+			skuInfo(val){
+				this.images = val.images.split(',')
+				this.activeAttr()
+			},
+			addressList(val){
+				if(val && val.length){
+					this.address =  val[0].receiveAddress
+				}
+			}
+		},
+		mounted() {
+			this.getAddress()
+			this.splitGoodsdetail()
+		}
+		
+	}).mount('#app')
+</script>

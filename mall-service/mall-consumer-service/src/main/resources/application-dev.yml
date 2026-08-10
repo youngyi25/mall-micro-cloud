@@ -1,0 +1,9 @@
+server:
+  port: 9005
+spring:
+  config:
+    import:
+      - nacos:log.yml
+      - nacos:mq.yml
+      - nacos:redis.yml
+      - nacos:mq_consumer.yml?group=CONSUMER_GROUP

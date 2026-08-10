@@ -1,0 +1,12 @@
+server:
+  port: 9008
+spring:
+  config:
+    import: #导入多个文件：Data ID?group=Group
+      - nacos:mysql.yml?group=SECKILL_GROUP
+      - nacos:mybatis.yml
+      - nacos:log.yml
+      - nacos:knife4j.yml
+      - nacos:redis.yml
+      - nacos:elasticjob.yml?group=SCHEDULER_GROUP
+      - nacos:task.yml?group=SCHEDULER_GROUP

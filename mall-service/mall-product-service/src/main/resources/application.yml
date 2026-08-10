@@ -1,0 +1,15 @@
+# 公共基础配置
+spring:
+  # 应用名称
+  application:
+    name: mall-product-service
+  # 激活开发环境，上线时改为 prod
+  profiles:
+    active: dev
+  config:
+    import:
+  cloud:
+    nacos:
+      server-addr: 192.168.150.101:8848
+      config:
+        namespace: ${spring.profiles.active:public} #动态获取命名空间,默认public

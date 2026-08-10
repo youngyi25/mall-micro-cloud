@@ -1,0 +1,36 @@
+{
+  "groups": [
+    {
+      "name": "knife4j.gateway",
+      "type": "com.github.xiaoymin.knife4j.spring.gateway.Knife4jGatewayProperties",
+      "sourceType": "com.github.xiaoymin.knife4j.spring.gateway.Knife4jGatewayProperties",
+      "description": "Knife4j 网关聚合配置"
+    }
+  ],
+  "properties": [
+    {
+      "name": "knife4j.gateway.enabled",
+      "type": "java.lang.Boolean",
+      "description": "是否开启 Knife4j 网关聚合功能"
+    },
+    {
+      "name": "knife4j.gateway.strategy",
+      "type": "com.github.xiaoymin.knife4j.spring.gateway.enums.GatewayStrategy",
+      "description": "网关聚合策略: manual(手动配置 routes) / discover(自动发现)"
+    },
+    {
+      "name": "knife4j.gateway.routes",
+      "type": "java.util.List<com.github.xiaoymin.knife4j.spring.gateway.Knife4jGatewayProperties$Router>",
+      "description": "手动聚合策略下显式的路由列表"
+    }
+  ],
+  "hints": [
+    {
+      "name": "knife4j.gateway.strategy",
+      "values": [
+        { "value": "manual", "description": "手动在 routes 中显式声明" },
+        { "value": "discover", "description": "通过注册中心自动发现" }
+      ]
+    }
+  ]
+}

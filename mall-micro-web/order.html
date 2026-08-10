@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <title>结算页</title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
+		<link rel="stylesheet" type="text/css" href="./css/modern-theme.css" />
+	<link rel="stylesheet" type="text/css" href="./css/order.css" />
+</head>
+
+<body>
+    <!-- 流星特效 -->
+    <div class=shooting-star></div>
+    <div class=shooting-star></div>
+    <div class=shooting-star></div>
+
+	<div id="app">
+    <!--head-->
+    <!-- 头部栏位 -->
+    <!--页面顶部-->
+    <div id="nav-bottom">
+        <!--顶部-->
+        <div class="nav-top">
+            <div class="top">
+                <div class="py-container">
+                    <div class="shortcut">
+                        <ul class="fl">
+                            <li class="f-item">shop欢迎您！</li>
+                            <li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
+                        </ul>
+                        <div class="fr typelist">
+                            <ul class="types">
+                                <li class="f-item"><span>我的订单</span></li>
+
+                                <li class="f-item"><span><a href="cart.html" target="_blank">我的购物车</a></span></li>
+                                <li class="f-item"><span><a href="home.html" target="_blank">我的shop</a></span></li>
+                                <li class="f-item"><span>shop会员</span></li>
+                                <li class="f-item"><span>企业采购</span></li>
+                                <li class="f-item"><span>关注shop</span></li>
+                                <li class="f-item"><span><a href="cooperation.html" target="_blank">合作招商</a></span></li>
+                                <li class="f-item"><span><a href="shoplogin.html" target="_blank">商家后台</a></span></li>
+                                <li class="f-item"><span>网站导航</li>
+						</ul>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+
+		<!--头部-->
+		<div class="header">
+			<div class="py-container">
+				<div class="yui3-g Logo">
+					<div class="yui3-u Left logoArea">
+						<a class="logo-bd" title="shop" href="index.html" target="_blank"></a>
+					</div>
+					<div class="yui3-u Rit searchArea">
+						<div class="search">
+							<form action="" class="sui-form form-inline">
+								<!--searchAutoComplete-->
+								<div class="input-append">
+									<input type="text" id="autocomplete" class="input-error input-xxlarge" />
+									<button class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
+								</div>
+							</form>
+						</div>
+					</div>
+					
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+	<div class="cart py-container" id="app">
+		<!--主内容-->
+		<div class="checkout py-container">
+			<div class="checkout-tit">
+				<h4 class="tit-txt">填写并核对订单信息</h4>
+			</div>
+			<div class="checkout-steps">
+				<!--收件人信息-->
+				<div class="step-tit">
+					<h5>收件人信息<span></span></h5>
+                        </div>
+                        <div class="step-cont">
+                            <div class="addressInfo">
+                                <ul class="addr-detail">
+                                    <li class="addr-item">
+                                        <div class="choose-address" v-for="(item,index) in addressList" :key="index">
+                                            <div @click="defaultAddress(item)" 
+											:class="defaultStatus == item.id? 'con name selected':'con name'">
+											<a href="javascript:;">{{item.name}}</a></div>
+                                            <div class="con address">
+                                                <span class="place">{{item.shippingAddress}}</span>
+                                                <span class="phone">{{item.phoneNumber}}<span v-if="item.defaultStatus==1">【默认】</span></span>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <!--确认地址-->
+                            </div>
+                        </div>
+                        <div class="hr"></div>
+                        <!--支付和送货-->
+                        <div class="payshipInfo">
+                            <div class="step-tit">
+                                <h5>支付方式</h5>
+                            </div>
+                            <div class="step-cont">
+                                <ul class="payType">
+                                    <li :class="order.playType==1?'selected':''" @click="defaultPayType(1)">支付宝</li>
+                                    <li :class="order.playType==2?'selected':''" @click="defaultPayType(2)">微信</span></li>
+                                </ul>
+                            </div>
+                            <div class="hr"></div>
+                            <div class="step-tit">
+                                <h5>送货清单</h5>
+                            </div>
+                            <div class="step-cont">
+                                <ul class="send-detail">
+                                    <li>
+                                        <div class="sendGoods">
+                                            <span>商品清单：</span>
+                                            <ul class="yui3-g" v-for="(order,index) in orders" :key="index">
+                                                <li class="yui3-u-1-6">
+                                                    <span><img :src="order.image" style="max-height: 100px;"/></span>
+                                                </li>
+                                                <li class="yui3-u-7-12">
+                                                    <div class="desc">{{order.skuName}}</div>
+                                                    <div class="seven">7天无理由退货</div>
+                                                </li>
+                                                <li class="yui3-u-1-12">
+                                                    <div class="price">￥{{order.price}}</div>
+                                                </li>
+                                                <li class="yui3-u-1-12">
+                                                    <div class="num">X{{order.quantity}}</div>
+                                                </li>
+                                                <li class="yui3-u-1-12">
+                                                    <div class="exit">有货</div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix trade">
+                    <div class="fc-price">应付金额:　<span class="price">¥{{allMoney()}}</span></div>
+                    <div class="fc-receiverInfo">
+                        寄送至:
+                        <span id="receive-address">{{address.shippingAddress}}</span> 收货人：
+                        <span id="receive-name">{{address.name}}</span>
+                        <span id="receive-phone">{{address.phoneNumber}}</span>
+                    </div>
+                </div>
+                <div class="submit">
+                    <a class="sui-btn btn-danger btn-xlarge" @click="commit()">提交订单</a>
+                </div>
+            </div>
+            <!-- 底部栏位 -->
+            <!--页面底部-->
+            <div class="clearfix footer">
+                <div class="py-container">
+                    <div class="footlink">
+                        <div class="Mod-service">
+                            <ul class="Mod-Service-list">
+                                <li class="grid-service-item intro  intro1">
+
+                                    <i class="serivce-item fl"></i>
+                                    <div class="service-text">
+                                        <h4>正品保障</h4>
+                                        <p>正品保障，提供发票</p>
+                                    </div>
+
+                                </li>
+                                <li class="grid-service-item  intro intro2">
+
+                                    <i class="serivce-item fl"></i>
+                                    <div class="service-text">
+                                        <h4>正品保障</h4>
+                                        <p>正品保障，提供发票</p>
+                                    </div>
+
+                                </li>
+                                <li class="grid-service-item intro  intro3">
+
+                                    <i class="serivce-item fl"></i>
+                                    <div class="service-text">
+                                        <h4>正品保障</h4>
+                                        <p>正品保障，提供发票</p>
+                                    </div>
+
+                                </li>
+                                <li class="grid-service-item  intro intro4">
+
+                                    <i class="serivce-item fl"></i>
+                                    <div class="service-text">
+                                        <h4>正品保障</h4>
+                                        <p>正品保障，提供发票</p>
+                                    </div>
+
+                                </li>
+                                <li class="grid-service-item intro intro5">
+
+                                    <i class="serivce-item fl"></i>
+                                    <div class="service-text">
+                                        <h4>正品保障</h4>
+                                        <p>正品保障，提供发票</p>
+                                    </div>
+
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="clearfix Mod-list">
+                            <div class="yui3-g">
+                                <div class="yui3-u-1-6">
+                                    <h4>购物指南</h4>
+                                    <ul class="unstyled">
+                                        <li>购物流程</li>
+                                        <li>会员介绍</li>
+                                        <li>生活旅行/团购</li>
+                                        <li>常见问题</li>
+                                        <li>购物指南</li>
+                                    </ul>
+
+                                </div>
+                                <div class="yui3-u-1-6">
+                                    <h4>配送方式</h4>
+                                    <ul class="unstyled">
+                                        <li>上门自提</li>
+                                        <li>211限时达</li>
+                                        <li>配送服务查询</li>
+                                        <li>配送费收取标准</li>
+                                        <li>海外配送</li>
+                                    </ul>
+                                </div>
+                                <div class="yui3-u-1-6">
+                                    <h4>支付方式</h4>
+                                    <ul class="unstyled">
+                                        <li>货到付款</li>
+                                        <li>在线支付</li>
+                                        <li>分期付款</li>
+                                        <li>邮局汇款</li>
+                                        <li>公司转账</li>
+                                    </ul>
+                                </div>
+                                <div class="yui3-u-1-6">
+                                    <h4>售后服务</h4>
+                                    <ul class="unstyled">
+                                        <li>售后政策</li>
+                                        <li>价格保护</li>
+                                        <li>退款说明</li>
+                                        <li>返修/退换货</li>
+                                        <li>取消订单</li>
+                                    </ul>
+                                </div>
+                                <div class="yui3-u-1-6">
+                                    <h4>特色服务</h4>
+                                    <ul class="unstyled">
+                                        <li>夺宝岛</li>
+                                        <li>DIY装机</li>
+                                        <li>延保服务</li>
+                                        <li>购物卡</li>
+                                        <li>会员充值卡</li>
+                                    </ul>
+                                </div>
+                                <div class="yui3-u-1-6">
+                                    <h4>帮助中心</h4>
+                                    <ul class="unstyled">
+                                        <li>夺宝岛</li>
+                                        <li>DIY装机</li>
+                                        <li>延保服务</li>
+                                        <li>购物卡</li>
+                                        <li>会员充值卡</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="Mod-copyright">
+                            <ul class="helpLink">
+                                <li>关于我们<span class="space"></span></li>
+                                <li>联系我们<span class="space"></span></li>
+                                <li>关于我们<span class="space"></span></li>
+                                <li>商家入驻<span class="space"></span></li>
+                                <li>营销中心<span class="space"></span></li>
+                                <li>友情链接<span class="space"></span></li>
+                                <li>关于我们<span class="space"></span></li>
+                                <li>营销中心<span class="space"></span></li>
+                                <li>友情链接<span class="space"></span></li>
+                                <li>关于我们</li>
+                            </ul>
+                            <p></p>
+                            <p>Copyright©2025-2030 All Rights Reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			</div>
+            <!--页面底部END-->
+            <script src="js/vue3.js"></script>
+            <script src="js/axios.js"></script>
+            <script src="js/request.js"></script>
+			<script src="js/common.js"></script>
+            <script>
+            	const {
+            		createApp
+            	} = Vue.createApp({
+            
+            		data() {
+            			return {
+							orders:[],
+            				order:{
+								userId:null,
+								playType:1,
+								orderType:0
+							},
+							addressList:{},
+							address:{},
+							defaultStatus:0,
+							submitting:false
+            			}
+            		},
+					methods:{
+						// 获取商品
+						getOrders(){
+							if(sessionStorage.getItem("orders")){
+								let json = sessionStorage.getItem("orders")
+								this.orders = JSON.parse(json)
+							}
+						},
+						// 加载用户地址
+						getAddress(){
+							if(sessionStorage.getItem("userInfo")){
+								let json = sessionStorage.getItem("userInfo")
+								let userInfo = JSON.parse(json)
+							    request.get('/api/user/shippingAddress/' + userInfo.userId)
+								.then(resp =>{
+									if(resp.code == 200){
+										let json = JSON.stringify(resp.data)
+										this.addressList = JSON.parse(json);
+									}else {
+										location.href = 'login.html'
+									}
+								})
+							}else{
+							  location.href = 'login.html?redirect=order.html'
+							}
+						},
+						defaultAddress(obj){
+							this.address = {...obj}
+							this.defaultStatus = obj.id
+						},
+						defaultPayType(value){
+							this.order.playType = value
+						},
+						allMoney(){
+							let moneys = 0.0;
+							for(let i=0;i<this.orders.length;i++){
+								moneys+=this.orders[i].quantity * this.orders[i].price
+							}
+							return moneys;
+						},
+						// 提交订单
+						commit(){
+							if(this.submitting) return;
+							if(sessionStorage.getItem("userInfo")){
+								let json = sessionStorage.getItem("userInfo")
+								let userInfo = JSON.parse(json)
+								this.order['userId'] = userInfo.userId
+								this.order['addressId'] = this.address.id
+								let ids = []
+								let orderItemsList = []
+								for(let i=0;i<this.orders.length;i++){
+									let orderItems={
+										skuId:this.orders[i].skuId,
+										skuName:this.orders[i].skuName,
+										price:this.orders[i].price,
+										quantity:this.orders[i].quantity,
+										image:this.orders[i].image
+									}
+									orderItemsList.push(orderItems)
+									ids.push(this.orders[i].id)
+								}
+								this.order['orderItemsList'] = orderItemsList
+								this.order['cartIds'] = ids;
+								this.submitting = true;
+							    request.post('/api/order/order/create',this.order)
+								.then(resp =>{
+								  if(resp.code === 200){
+									  let payInfo = JSON.stringify(resp.data)
+									  sessionStorage.setItem("payInfo",payInfo);
+
+									  location.href="alipay.html"
+								  }else{
+									  this.submitting = false;
+								  alert('提交失败：' + (resp.msg || '未知错误'))
+								  }
+								})
+								.catch(err =>{
+								  this.submitting = false;
+								  alert('请求失败：' + (err.message || '网络异常'))
+								})
+							}else{
+							  location.href = 'login.html?redirect=order.html'
+							}
+							
+						}
+					},
+					watch:{
+						addressList(v){
+							for(let i = 0; i < v.length; i++){
+								if(v[i].defaultStatus == 1){
+									this.defaultAddress(v[i])
+									break;
+								}
+							}
+						}
+					},
+					
+            		mounted() {
+						this.getOrders()
+            			this.getAddress()
+            		}
+            	}).mount('#app')
+            </script>
+
+</body>
+
+</html>

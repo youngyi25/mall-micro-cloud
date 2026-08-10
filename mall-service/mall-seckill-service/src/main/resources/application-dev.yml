@@ -1,0 +1,18 @@
+server:
+  port: 9007
+spring:
+  config:
+    import: #导入多个文件：Data ID?group=Group
+      - nacos:mysql.yml?group=SECKILL_GROUP
+      - nacos:mybatis.yml
+      - nacos:log.yml
+      - nacos:knife4j.yml
+      - nacos:redis.yml
+      - nacos:thymeleaf.yml?group=SECKILL_GROUP
+
+# 布隆过滤器配置（防缓存穿透）
+cache:
+  bloom:
+    name: seckill-activity-bloom
+    expectedInsertions: 10000
+    falseProbability: 0.1

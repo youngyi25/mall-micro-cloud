@@ -1,0 +1,168 @@
+server:
+  port: 9000  # 网关端口
+spring:
+  data:
+    redis:
+      host: 192.168.150.101
+      port: 6379
+      lettuce:
+        pool:
+          max-active: 20
+          max-idle: 10
+          min-idle: 5
+      timeout: 3000ms
+  application:
+    name: mall-gateway
+  main:
+    web-application-type: reactive   # 强制使用响应式
+  cloud:
+
+    nacos:
+      server-addr: 192.168.150.101:8848  # Nacos注册中心地址
+      config:
+        import-check:
+          enabled: false
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+      routes:
+        - id: mall-product-service
+          uri: lb://mall-product-service
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - Auth=/api/user/login,/api/user/register,/api/product/**,/category/**,/brand/**,/product/**,/spuInfo/**,/skuInfo/**,/categoryBrand/**,/saleAttribute/**,/saleAttributeValue/**,/api/test/**,/api/pay/**
+            - RewritePath=/api/product/(?<segment>.*), /$\{segment}
+        - id: mall-product-service-raw
+          uri: lb://mall-product-service
+          predicates:
+            - Path=/category/**,/brand/**,/product/**,/spuInfo/**,/skuInfo/**,/categoryBrand/**,/saleAttribute/**,/saleAttributeValue/**
+          filters:
+            - Auth=/api/user/login,/api/user/register,/api/product/**,/category/**,/brand/**,/product/**,/spuInfo/**,/skuInfo/**,/categoryBrand/**,/saleAttribute/**,/saleAttributeValue/**,/api/test/**,/api/pay/**
+        - id: mall-user-service
+          uri: lb://mall-user-service
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - Auth=/api/user/login,/api/user/register,/api/product/**,/category/**,/brand/**,/product/**,/spuInfo/**,/skuInfo/**,/categoryBrand/**,/saleAttribute/**,/saleAttributeValue/**,/api/test/,/test/**
+            - RewritePath=/api/user/(?<segment>.*), /$\{segment}
+        - id: mall-test-service
+          uri: lb://mall-test-service
+          predicates:
+            - Path=/api/test/**
+          filters:
+            - Auth=/api/user/login,/api/user/register,/api/test/connect/**,/api/aliyun/oss/**
+            - RewritePath=/api/test/(?<segment>.*), /$\{segment}
+        # Knife4j 文档入口：doc.html、swagger-ui、webjars 均由 product-service 承载（Knife4j 静态资源）
+        - id: mall-knife4j-doc
+          uri: lb://mall-product-service
+          predicates:
+            - Path=/doc.html,/v3/api-docs/**,/swagger-ui/**,/webjars/**
+        # 各服务 OpenAPI 文档分组入口（Knife4j 多服务聚合依赖这两个子路由）
+        - id: mall-prod-knife4j-doc
+          uri: lb://mall-product-service
+          predicates:
+            - Path=/api/product/v3/api-docs/**
+          filters:
+            - StripPrefix=2
+        - id: mall-user-knife4j-doc
+          uri: lb://mall-user-service
+          predicates:
+            - Path=/api/user/v3/api-docs/**
+          filters:
+            - StripPrefix=2
+        - id: mall-test-knife4j-doc
+          uri: lb://mall-test-service
+          predicates:
+            - Path=/api/test/v3/api-docs/**
+          filters:
+            - StripPrefix=2
+        - id: mall-oss-service
+          uri: lb://mall-oss-service
+          predicates:
+            - Path=/api/aliyun/oss/**
+          filters:
+            - StripPrefix=2
+        - id: mall-cart-service
+          uri: lb://mall-cart-service
+          predicates:
+            - Path=/api/cart/**
+          filters:
+            - StripPrefix=2
+        - id: mall-order-service
+          uri: lb://mall-order-service
+          predicates:
+            - Path=/api/order/**
+          filters:
+            - StripPrefix=2
+        - id: mall-pay-service
+          uri: lb://mall-pay-service
+          predicates:
+            - Path=/api/pay/**
+          filters:
+            - StripPrefix=2
+        - id: mall-seckill-service
+          uri: lb://mall-seckill-service
+          predicates:
+            - Path=/api/seckill/**
+          filters:
+            - Auth=/api/seckill/seckillActivity/list/**,/api/seckill/seckillGoods/**,/api/seckill/page/**,/api/seckill/items/**
+            - StripPrefix=2
+            # 1. 活动级别限流（整个秒杀活动，启用）
+            - name: RequestRateLimiter
+              args:
+                key-resolver: "#{@activityKeyResolver}"
+                redis-rate-limiter.replenishRate: 2000
+                redis-rate-limiter.burstCapacity: 5000
+            # 2. 用户级别限流（每个用户，备用）
+            #- name: RequestRateLimiter
+             # args:
+              #  key-resolver: "#{@userKeyResolver}"
+               # redis-rate-limiter.replenishRate: 5
+                #redis-rate-limiter.burstCapacity: 10
+            # 3. IP级别限流（防止单IP刷接口，备用）
+            #- name: RequestRateLimiter
+             # args:
+              #  key-resolver: "#{@ipLimitKeyResolver}"
+               # redis-rate-limiter.replenishRate: 10
+                #redis-rate-limiter.burstCapacity: 20
+        # 秒杀服务 OpenAPI 文档分组入口
+        - id: mall-seckill-knife4j-doc
+          uri: lb://mall-seckill-service
+          predicates:
+            - Path=/api/seckill/v3/api-docs/**
+          filters:
+            - StripPrefix=2
+# Knife4j 网关聚合配置：显式声明各微服务文档入口，出现在 doc.html 的服务下拉框
+knife4j:
+  gateway:
+    enabled: true
+    strategy: manual
+    routes:
+      - name: mall-product-service
+        url: /api/product/v3/api-docs
+        # contextPath 决定 Swagger UI 前端发请求时的 base 前缀；为空则前端会打到网关根路径导致 404
+        contextPath: /api/product
+        service-name: mall-product-service
+        order: 1
+      - name: mall-user-service
+        url: /api/user/v3/api-docs
+        # 显式声明 /api/user：前端调试接口时会以它为 base 发 /api/user/login、/Api/user/shippingAddress/xxx
+        contextPath: /api/user
+        service-name: mall-user-service
+        order: 2
+      - name: mall-test-service
+        url: /api/test/v3/api-docs
+        contextPath: /api/test
+        service-name: mall-test-service
+        order: 3
+      - name: mall-seckill-service
+        url: /api/seckill/v3/api-docs
+        contextPath: /api/seckill
+        service-name: mall-seckill-service
+        order: 4

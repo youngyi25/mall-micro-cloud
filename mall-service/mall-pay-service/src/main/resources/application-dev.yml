@@ -1,0 +1,14 @@
+server:
+  port: 9006
+spring:
+  config:
+    import:
+      - nacos:mysql.yml?group=PAY_GROUP
+      - nacos:mybatis.yml
+      - nacos:log.yml
+      - nacos:knife4j.yml
+      - nacos:redis.yml
+      - nacos:mq.yml
+      - nacos:alipay.yml?group=PAY_GROUP
+      - nacos:mq_producer.yml?group=PAY_GROUP
+      - nacos:thymeleaf.yml?group=PAY_GROUP

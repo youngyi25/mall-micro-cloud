@@ -1,0 +1,60 @@
+# 公共基础配置
+spring:
+  # 应用名称
+  application:
+    name: mall-user-service
+  # 激活开发环境，上线时改为 prod
+  profiles:
+    active: dev
+  config:
+    import:
+  # Redis 配置
+  data:
+    redis:
+      host: 192.168.150.101
+      port: 6379
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 4
+          min-idle: 1
+  # 注册中心服务器地址
+  cloud:
+    nacos:
+      server-addr: 192.168.150.101:8848
+      # 用户服务使用本地配置，不依赖 Nacos 配置中心；关闭后不再校验 spring.config.import
+      config:
+        namespace: ${spring.profiles.active:public} #动态获取命名空间,默认public
+# MyBatis-Plus 全局配置
+mybatis-plus:
+  # mapper xml 文件路径
+  mapper-locations: classpath:mapper/*.xml
+  # 实体类别名包
+  type-aliases-package: com.example.mall.user.domain.entity
+  configuration:
+    # 开启枚举处理
+    default-enum-type-handler: com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler
+    # 开启驼峰命名转换
+    map-underscore-to-camel-case: true
+    # 打印SQL（开发可保留，生产关闭）
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 日志级别
+logging:
+  level:
+    root: info
+    com.example.mall.user.mapper: debug
+# springdoc-openapi 配置
+springdoc:
+  # 参数扁平化处理（解决 GET 请求对象参数接收问题）
+  default-flat-param-object: true
+# Knife4j 配置
+knife4j:
+  # 是否开启 Knife4j 增强功能
+  enable: true
+  # 是否开启生产环境屏蔽（生产环境建议开启）
+  production: false
+# JWT参数配置
+jwt:
+  secret-key: MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY # 密钥
+  expire-time: 3600000 # 过期时间,单位毫秒,30分钟

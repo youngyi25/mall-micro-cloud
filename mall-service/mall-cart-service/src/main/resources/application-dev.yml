@@ -1,0 +1,7 @@
+server:
+  port: 9003
+spring:
+  config:
+    import:
+      - nacos:mongodb.yml?group=CART_GROUP
+      - nacos:log.yml

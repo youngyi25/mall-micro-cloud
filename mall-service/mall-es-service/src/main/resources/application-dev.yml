@@ -1,0 +1,8 @@
+# 服务端口（开发端口，避免冲突）
+server:
+  port: 9006
+spring:
+  config:
+    import:
+      - nacos:es.yml?group=ES_GROUP
+      - nacos:knife4j.yml

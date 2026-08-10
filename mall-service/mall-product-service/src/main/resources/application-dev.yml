@@ -1,0 +1,16 @@
+# 服务端口（开发端口，避免冲突）
+server:
+  port: 9001
+spring:
+  config:
+    import: #导入多个文件：Data ID?group=Group
+      - nacos:mysql.yml?group=PRODUCT_GROUP
+      - nacos:thymeleaf.yml?group=PRODUCT_GROUP
+      - nacos:mybatis.yml
+      - nacos:log.yml
+      - nacos:knife4j.yml
+      - nacos:sentinel.yml
+      - nacos:order_stock.yml?group=SEATA_GROUP
+feign:
+  sentinel:
+    enabled: true

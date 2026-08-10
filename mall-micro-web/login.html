@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link href="css/global.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="css/modern-theme.css" />
+	</head>
+	<body>
+    <!-- 流星特效 -->
+    <div class=shooting-star></div>
+    <div class=shooting-star></div>
+    <div class=shooting-star></div>
+
+		<div id="app">
+			<div id="header">
+			    <div class="login_header_mid"></div>
+			    <div class="login_header_right"><a href="index.html" class="blue">首页</a> | <a href="product.html" class="blue">商品展示页</a> | <a href="login.html" class="blue">登录</a> | <a href="register.html" class="blue">注册</a></div>
+			</div>
+			<div id="main">
+			    <div class="login_main_left">
+			        <div>
+			            <img src="img/login_main_01.jpg" alt=""/>
+			            <img src="img/login_main_02.jpg" alt=""/>
+			            <img src="img/login_main_03.jpg" alt=""/>
+			        </div>
+			        <div class="login_main_end">
+			            <dl class="login_green"><dt>更多选择、更低价格</dt><dd>100万种商品包含图书、数码、美妆、运动健康等</dd></dl>
+			            <div class="login_main_dotted"></div>
+			            <dl class="login_green"><dt>全场免运费、货到付款</dt><dd>免费送货上门、360个城市货到付款</dd></dl>
+			            <div class="login_main_dotted"></div>
+			            <dl class="login_green"><dt>真实、优质的商品评论</dt><dd>千万用户真实、优质的商品评论</dd></dl>
+			        </div>
+			    </div>
+			    <div class="login_main_mid">
+			        <div class="login_content_top">请登录云淘网</div>
+			        <div class="login_content_line"></div>
+			        <div style="clear:both;margin-left:80px;color:red;min-height:20px;">{{errMsg}}</div>
+			        <dl class="login_content">
+			            <dt>用户名：</dt>
+			            <dd><input type="text" v-model="userLogin.username" placeholder="请输入用户名" class="login_content_input"></dd>
+			        </dl>
+			        <dl class="login_content">
+			            <dt>密码：</dt>
+			            <dd><input type="password" v-model="userLogin.password" placeholder="请输入密码" class="login_content_input"></dd>
+			        </dl>
+			        <dl class="login_content">
+			            <dt>&nbsp;</dt>
+			            <dd><button type="button" @click="login">登录</button></dd>
+			        </dl>
+			        <div class="login_content_dotted"></div>
+			        <div class="login_content_end_bg">
+			            <div class="login_content_end_bg_top"><label class="login_content_bold">还不是云淘网用户？</label>快捷方便的免费注册</div>
+			            <div class="login_content_end_bg_end"><input @click="register()" class="login_register_out" value=" " type="button"/></div>
+			        </div>
+			    </div>
+			    <div class="login_main_right"><img src="img/login_main_04.jpg" alt=""/></div>
+			</div>
+		</div>
+	</body>
+</html>
+<script src="js/vue3.js"></script>
+<script src="js/axios.js"></script>
+<script src="js/request.js"></script>
+<script src="js/common.js"></script>
+<script>
+(function(){
+	var app = Vue.createApp({
+		data: function(){
+			return {
+				userLogin: { username:'', password:'' },
+				errMsg: ''
+			};
+		},
+		methods: {
+			login: function(){
+				var self = this;
+				request.post('/api/user/login', this.userLogin)
+				.then(function(resp){
+					if(resp && (resp.code===200 || resp.username)){
+						// 保存用户信息到 sessionStorage，供其他页面验证登录状态
+						var userData = resp.data || resp;
+						var userInfo = {
+							userId: userData.id,
+							username: userData.username,
+							email: userData.email
+						};
+						sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+						// 优先从响应体获取token，其次从sessionStorage获取（响应拦截器可能已保存）
+						var token = userData.token || sessionStorage.getItem("token") || '';
+						sessionStorage.setItem("token", token);
+						var params = new URLSearchParams(window.location.search);
+						var redirect = params.get('redirect');
+						location.href = redirect || 'index.html';
+					}else{
+						self.errMsg = (resp && resp.msg) ? resp.msg : '登录失败，请检查网络';
+					}
+				})
+				.catch(function(err){
+					self.errMsg = '请求失败：' + (err.message || '未知错误');
+				});
+			},
+			register: function(){
+				window.location = 'register.html';
+			}
+		}
+	});
+	app.mount('#app');
+})();
+</script>

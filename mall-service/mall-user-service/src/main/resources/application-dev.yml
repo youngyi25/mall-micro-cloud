@@ -1,0 +1,31 @@
+# 服务端口（开发端口，避免冲突）
+server:
+  port: 9002
+# 开发环境专属配置
+spring:
+  # 数据源 + Druid 连接池
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.150.101:3306/shop_user?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 初始连接数
+      initial-size: 5
+      # 最小空闲连接
+      min-idle: 5
+      # 最大活跃连接
+      max-active: 20
+  config:
+    import: #导入多个文件：Data ID?group=Group
+        - nacos:mysql.yml?group=USER_GROUP
+        - nacos:jwt.yml?group=USER_GROUP
+        - nacos:mybatis.yml?group=USER_GROUP
+        - nacos:log.yml
+        - nacos:knife4j.yml
+        - nacos:sentinel.yml
+        - nacos:redis.yml
+feign:
+  sentinel:
+    enabled: true
