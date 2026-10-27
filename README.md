@@ -148,7 +148,7 @@ mall-micro-cloud/
 
 ```bash
 # 1. 克隆项目
-git clone https://github.com/youngyi25/mall-micro-cloude.git
+git clone https://github.com/youngyi25/mall-micro-cloud.git
 cd mall-micro-cloud
 
 # 2. 构建整个项目（跳过测试）
