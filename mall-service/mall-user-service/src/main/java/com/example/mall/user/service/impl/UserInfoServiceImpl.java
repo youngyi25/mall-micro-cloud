@@ -26,10 +26,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public UserInfoDTO validate(String username, String password) {
         // 创建条件构造器
-        LambdaQueryChainWrapper<UserInfo> query = new LambdaQueryChainWrapper<>(getBaseMapper());
+
         // 查询用户
-        UserInfo userInfo = query.eq(UserInfo::getUsername, username)
-                .eq(UserInfo::getStatus,0)
+        UserInfo userInfo = lambdaQuery().eq(UserInfo::getUsername, username)
+                .eq(UserInfo::getStatus, 0)
                 .one();
         // 验证用户和密码
         if (userInfo != null) {

@@ -24,6 +24,7 @@
         <module>mall-es-service</module>
         <module>mall-seckill-service</module>
         <module>mall-scheduler-service</module>
+        <module>mall-AISearch-service</module>
     </modules>
 
     <properties>

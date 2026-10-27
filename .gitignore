@@ -1,35 +1,55 @@
+### Maven / Java ###
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
-### IntelliJ IDEA ###
-.idea/
-*.iws
-*.iml
-*.ipr
-
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+*.class
+*.jar
+*.war
+*.ear
+dependency-reduced-pom.xml
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+### IDE ###
+.idea/
+*.iml
+*.iws
+*.ipr
 .vscode/
+.settings/
+.apt_generated
+.classpath
+.factorypath
+.project
+.springBeans
+.sts4-cache
 
-### Mac OS ###
+### 前端 / 依赖 ###
+node_modules/
+mall-micro-web/node_modules/
+mall-micro-web/dist/
+
+### 日志 ###
+*.log
+logs/
+
+### OS ###
 .DS_Store
+Thumbs.db
+
+### 本地密钥 / 环境变量（禁止提交）###
+.env
+.env.local
+*.env
+*.pem
+*.p12
+
+### 本地 AI 工具配置 ###
+.workbuddy/
+.codex/
+.mimocode/
+.claude/
+AGENTS.md
+CLAUDE.md

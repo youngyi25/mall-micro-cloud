@@ -1,0 +1,13 @@
+server:
+  port: 9011
+
+spring:
+  application:
+    name: mall-AIsearch-service
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:mysql://192.168.150.101:3306/shop_goods
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver

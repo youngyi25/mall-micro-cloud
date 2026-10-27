@@ -26,8 +26,7 @@ public class ShippingAddressServiceImpl extends ServiceImpl<ShippingAddressMappe
     @Override
     public List<ShippingAddressDTO> listById(String userId) {
         // 创建条件构造器
-        LambdaQueryChainWrapper<ShippingAddress> query = new LambdaQueryChainWrapper(baseMapper);
-        List<ShippingAddress> list = query.eq(ShippingAddress::getUserId, userId).list();
+        List<ShippingAddress> list = lambdaQuery().eq(ShippingAddress::getUserId, userId).list();
         // 返回DTO列表
         List<ShippingAddressDTO> dtos = JsonUtils.toList(list, ShippingAddressDTO.class);
         return dtos;
@@ -40,9 +39,7 @@ public class ShippingAddressServiceImpl extends ServiceImpl<ShippingAddressMappe
         // 修改默认地址
         if (entity.getDefaultStatus() == 1) {
             // 创建条件构造器
-            LambdaUpdateChainWrapper<ShippingAddress> updateChainWrapper = new LambdaUpdateChainWrapper(baseMapper);
-            // 清除默认地址
-            updateChainWrapper.eq(ShippingAddress::getUserId, entity.getUserId())
+            lambdaUpdate().eq(ShippingAddress::getUserId, entity.getUserId())
                     .set(ShippingAddress::getDefaultStatus, 0)
                     .update();
         }

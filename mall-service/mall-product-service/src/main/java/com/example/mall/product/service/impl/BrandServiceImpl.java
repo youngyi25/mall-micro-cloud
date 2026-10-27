@@ -23,8 +23,7 @@ import java.util.List;
 public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements IBrandService {
     @Override
     public List<BrandDTO> listAll() {
-        LambdaQueryChainWrapper<Brand> query = new LambdaQueryChainWrapper(baseMapper);
-        List<Brand> list = query
+        List<Brand> list = lambdaQuery()
                 .gt(Brand::getId, 0) // 绕过插件校验(禁止全表扫描)
                 .select(Brand::getId, Brand::getName, Brand::getLogo)
                 .list();
